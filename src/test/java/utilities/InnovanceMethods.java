@@ -209,35 +209,6 @@ public class InnovanceMethods {
     }
 
 
-    public static void yeniSayfaDeneme(String baseUrl, String expectedUrlPart) {
-        driver.get(baseUrl);
-        String innovanceWindowhandle = driver.getWindowHandle();
-        Set<String> whdSeti = driver.getWindowHandles();
-        String ikinciWhd = "";
-
-        for (String each : whdSeti) {
-            if (!each.equals(innovanceWindowhandle)) {
-                ikinciWhd = each;
-            }
-        }
-
-        driver.switchTo().window(ikinciWhd);
-
-        bekle(3);
-        String actualUrl = driver.getCurrentUrl();
-
-
-        try {
-            Assert.assertTrue(actualUrl.contains(expectedUrlPart));
-            System.out.println(expectedUrlPart+" "+"Testi dogru calisti!");
-        } catch (AssertionError e) {
-            System.out.println(expectedUrlPart+" "+"Testi hatali calisti!");
-            hataGoruntu();
-        } finally {
-            driver.switchTo().window(innovanceWindowhandle);
-        }
-
-    }
 
     public static void yeniSayfaSosyalMedya(String baseUrl, String expectedUrlPart) {
 

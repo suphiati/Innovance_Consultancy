@@ -13,6 +13,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.*;
 import org.testng.Assert;
+import org.testng.asserts.SoftAssert;
 import pages.InnovancePage;
 
 import java.text.SimpleDateFormat;
@@ -39,7 +40,7 @@ public class ReusableMethods {
     public static void tumSayfaFotografCek(String resimAdi){
         // her screenshot'in benzersiz bir isme sahip olmasi icin
         // 1- method'un cagrildigi yerden resim adi yollanacak
-        // 2- sonuna tarih etiketi ekleyelim 2310062013
+        // 2- sonuna tarih etiketi ekleyelim
 
         LocalDateTime ldt = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMddHHmm");
@@ -207,110 +208,7 @@ public class ReusableMethods {
         return element;
     }
 
-    public static void yeniSayfa() {
 
-        driver.get("https://innovance.com.tr/");
-        String innovanceWindowhandle = driver.getWindowHandle();
-        Set<String> whdSeti = driver.getWindowHandles();
-        String ikinciWhd = "";
-
-        for (String each : whdSeti
-        ) {
-            if (!each.equals(innovanceWindowhandle)) {
-                ikinciWhd = each;
-            }
-
-            driver.switchTo().window(ikinciWhd);
-        }
-
-
-        bekle(5);
-        //driver.switchTo().window(innovanceWindowhandle);
-
-    }
-
-
-
-    public static void yeniSayfaDeneme(String baseUrl, String expectedUrlPart) {
-        driver.get(baseUrl);
-        String innovanceWindowhandle = driver.getWindowHandle();
-        Set<String> whdSeti = driver.getWindowHandles();
-        String ikinciWhd = "";
-
-        for (String each : whdSeti) {
-            if (!each.equals(innovanceWindowhandle)) {
-                ikinciWhd = each;
-            }
-        }
-
-        driver.switchTo().window(ikinciWhd);
-
-        bekle(3);
-        String actualUrl = driver.getCurrentUrl();
-
-        //Assert.assertTrue(actualUrl.contains(expectedUrlPart));
-        //driver.switchTo().window(innovanceWindowhandle);
-
-
-        try {
-            Assert.assertTrue(actualUrl.contains(expectedUrlPart));
-            System.out.println(expectedUrlPart+" "+"Testi dogru calisti!");
-        } catch (AssertionError e) {
-            System.out.println(expectedUrlPart+" "+"Testi hatali calisti!");
-            hataGoruntu();
-        } finally {
-            driver.switchTo().window(innovanceWindowhandle);
-        }
-
-    }
-
-    public static void yeniSayfaTwitter(String baseUrl, String expectedUrlPart) {
-        driver.get(baseUrl);
-        String innovanceWindowhandle = driver.getWindowHandle();
-        Set<String> whdSeti = driver.getWindowHandles();
-        String ikinciWhd = "";
-
-        for (String each : whdSeti) {
-            if (!each.equals(innovanceWindowhandle)) {
-                ikinciWhd = each;
-            }
-        }
-
-        driver.switchTo().window(ikinciWhd);
-
-        bekle(3);
-        String actualUrl = driver.getCurrentUrl();
-
-        // URL testi sonucunu bastır
-        System.out.println("Actual Url: " + actualUrl);
-
-        // URL'nin belirli bir içeriği içerip içermediğini kontrol et
-        String expectedUrlIcerik = expectedUrlPart;  // Örnek içerik
-        if (actualUrl.contains(expectedUrlIcerik)) {
-            System.out.println(expectedUrlIcerik+" "+"URL Testi Başarılı");
-        } else {
-            System.out.println(expectedUrlIcerik+" "+"URL Testi Başarısız");
-            try {
-                hataGoruntu();  // Başarısızlık durumunda ekran görüntüsünü al
-                System.out.println("Başarısız URL Görüntüsü Kaydedildi: " + "hata_ekran_goruntuleri");  // Görüntü yolu
-            } catch (Exception e) {
-                System.out.println("Ekran görüntüsü alınırken hata oluştu.");
-            }
-        }
-
-        // URL'nin expectedUrlPart'i içerip içermediğini kontrol eden assertion
-     /*   try {
-            Assert.assertTrue(actualUrl.contains(expectedUrlPart));
-            System.out.println("Test doğru çalıştı!");
-        } catch (AssertionError e) {
-            System.out.println("Test hatalı çalıştı!");
-            hataGoruntu();
-        } finally {
-            driver.switchTo().window(innovanceWindowhandle);
-        }
-
-      */
-    }
 
     public static boolean hataGoruntu() {
         // Ekran görüntüsünü alma
@@ -327,71 +225,6 @@ public class ReusableMethods {
     }
 
 
-    public static void innovanceMethodYoutube(){
-        yeniSayfaDeneme("https://innovance.com.tr/","youtube");
-        bekle(2);
-    }
-    public static void innovanceMethodInstagram(){
-        yeniSayfaDeneme("https://innovance.com.tr/","instagram");
-        bekle(2);
-    }
-
-    public static void innovanceMethodMedium(){
-        yeniSayfaDeneme("https://innovance.com.tr/","medium");
-        bekle(2);
-    }
-    public static void innovanceMethodTwitter(){
-        yeniSayfaTwitter("https://innovance.com.tr/","twitter");
-        bekle(2);
-/*
-        File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-        String filePath = "hata_ekran_goruntuleri/Hata_" + System.currentTimeMillis() + ".png";
-        try {
-            // Ekran görüntüsünü belirli bir dosya yoluna kaydetme
-            FileUtils.copyFile(screenshot, new File(filePath));
-            System.out.println("Hata ekran görüntüsü kaydedildi: " + filePath);
-        } catch (IOException ioException) {
-            System.out.println("Ekran görüntüsü kaydedilemedi: " + ioException.getMessage());
-        }
-        */
-
-    }
-
-    public static void innovanceTwitterTikla(){
-        InnovancePage innovancePage =new InnovancePage();
-        bekle(1);
-        hover(innovancePage.informationSecurityPolicy);
-        innovancePage.twitter.click();
-        waitForPageToLoad(10);
-        bekle(2);
-    }
-
-    public static void innovanceInstagramTikla(){
-        InnovancePage innovancePage =new InnovancePage();
-        bekle(3);
-        hover(innovancePage.informationSecurityPolicy);
-        innovancePage.instagram.click();
-        waitForPageToLoad(10);
-        bekle(2);
-    }
-
-    public static void innovanceYoutubeTikla(){
-        InnovancePage innovancePage =new InnovancePage();
-        hover(innovancePage.informationSecurityPolicy);
-        innovancePage.youtube.click();
-        waitForPageToLoad(10);
-        bekle(2);
-    }
-
-    public static void innovanceMediumTikla(){
-        InnovancePage innovancePage =new InnovancePage();
-        hover(innovancePage.informationSecurityPolicy);
-        innovancePage.medium.click();
-        waitForPageToLoad(10);
-        bekle(2);
-    }
-
-
 
     public static void scrollToBottom(WebElement element) {
         Actions actions=new Actions(Driver.getDriver());
@@ -402,66 +235,7 @@ public class ReusableMethods {
         //actions.scrollToElement(element).perform();
     }
 
-    public static void privacyPolicy(WebElement element){
-        InnovancePage innovancePage=new InnovancePage();
-        ReusableMethods.bekle(2);
-        ReusableMethods.hover(innovancePage.privacyPolicy);
-        innovancePage.privacyPolicy.click();
-        ReusableMethods.bekle(2);
-        Driver.getDriver().navigate().back();
-        ReusableMethods.bekle(1);
-        innovancePage.arrowUp.click();
-    }
-
-    public static void termsOfUse(WebElement element){
-        InnovancePage innovancePage=new InnovancePage();
-        ReusableMethods.bekle(2);
-        ReusableMethods.hover(innovancePage.termsOfUse);
-        innovancePage.termsOfUse.click();
-        ReusableMethods.bekle(2);
-        Driver.getDriver().navigate().back();
-        ReusableMethods.bekle(1);
-        innovancePage.arrowUp.click();
-    }
-
-    public static void cookiePolicy(WebElement element){
-        InnovancePage innovancePage=new InnovancePage();
-        ReusableMethods.bekle(2);
-        ReusableMethods.hover(innovancePage.cookiePolicy);
-        innovancePage.cookiePolicy.click();
-        ReusableMethods.bekle(2);
-        Driver.getDriver().navigate().back();
-    }
-
-    public static void kvkk(WebElement element) {
-        InnovancePage innovancePage = new InnovancePage();
-        ReusableMethods.bekle(2);
-        ReusableMethods.hover(innovancePage.kvkk);
-        innovancePage.kvkk.click();
-        ReusableMethods.bekle(2);
-        Driver.getDriver().navigate().back();
-
-    }
-
-    public static void innovanceFooter(WebElement element) {
-        InnovancePage innovancePage = new InnovancePage();
-        ReusableMethods.bekle(2);
-        ReusableMethods.hover(element);
-        element.click();
-        ReusableMethods.bekle(2);
-        Driver.getDriver().navigate().back();
-
-    }
 
 
 
-    public static void informationSecurityPolicy(WebElement element){
-        InnovancePage innovancePage = new InnovancePage();
-
-        ReusableMethods.bekle(2);
-        ReusableMethods.hover(innovancePage.informationSecurityPolicy);
-        innovancePage.informationSecurityPolicy.click();
-        ReusableMethods.bekle(2);
-        Driver.getDriver().navigate().back();
-    }
 }
